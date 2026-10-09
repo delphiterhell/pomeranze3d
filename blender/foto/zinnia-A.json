@@ -1,0 +1,14 @@
+{
+  "sorgente": "images/hero.webp",
+  "sinistra": 967,
+  "alto": 809,
+  "larghezza": 163,
+  "altezza": 236,
+  "corolla": {
+    "sinistra": 973,
+    "destra": 1124,
+    "alto": 816,
+    "basso": 908
+  },
+  "stelo_fino_a_y": 1040
+}

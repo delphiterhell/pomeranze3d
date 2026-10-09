@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/hero-scena.css">
 
   <!-- Netlify Identity (gestisce invite_token e recovery_token) -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
@@ -60,7 +61,19 @@
         aria-hidden="true"
       >
 
+      <!-- Stessa foto senza la zinnia A (che nella scena animata sta accanto alla ragazza):
+           caricata e mostrata da js/hero-scena.js solo quando la scena è pronta -->
+      <img
+        data-src="images/hero-senza-zinnia-A.webp"
+        alt=""
+        class="hero-bg hero-bg-scena"
+        aria-hidden="true"
+      >
+
       <div class="api-container" aria-hidden="true"></div>
+
+      <!-- Scena animata: ragazza, zinnia fotografica ed erba in primo piano (js/hero-scena.js) -->
+      <canvas class="hero-scena-3d" aria-hidden="true"></canvas>
 
       <div class="hero-velo">
         <div class="hero-testo">
@@ -70,11 +83,14 @@
           <a href="#prodotti" class="btn btn-salvia btn-pillola hero-desktop-only">Scopri i fiori</a>
         </div>
         <div class="hero-bottom-row">
-          <img
-            src="images/ragazza.webp"
-            alt="Illustrazione di Clelia nel campo"
-            class="hero-ragazza"
-          >
+          <!-- L'illustrazione resta come fallback e dà le misure alla scena animata -->
+          <div class="hero-ragazza-scena">
+            <img
+              src="images/ragazza.webp"
+              alt="Illustrazione di Clelia nel campo"
+              class="hero-ragazza"
+            >
+          </div>
           <div class="hero-bottom-text">
             <p class="hero-sottotitolo">Ogni fiore nasce nel rispetto della terra, degli impollinatori e dei ritmi della natura. Perché coltivare significa prendersi cura di un ecosistema, non solo di un raccolto.</p>
             <a href="#prodotti" class="btn btn-salvia btn-pillola">Scopri i fiori</a>
@@ -324,6 +340,16 @@
   <script src="js/main.js"></script>
   <script src="js/bees.js"></script>
   <script src="js/chi-sono-anim.js"></script>
+  <!-- Three.js (solo per la scena animata della hero) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="js/hero-scena.js"></script>
   <script>document.getElementById('anno').textContent = new Date().getFullYear();</script>
 
 </body>

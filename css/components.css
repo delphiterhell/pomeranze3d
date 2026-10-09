@@ -120,6 +120,37 @@
   box-shadow: none;
   background: none;
   flex-shrink: 0;
+  transition: opacity 0.9s ease;
+}
+
+/* Riquadro della ragazza: l'illustrazione ne definisce l'ingombro,
+   il canvas 3D (js/hero-3d.js) le si sovrappone quando il modello è pronto */
+.hero-ragazza-scena {
+  position: relative;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+/* Un po' più largo del riquadro, così l'oscillazione non viene tagliata ai lati */
+.hero-ragazza-canvas {
+  position: absolute;
+  left: -12%;
+  bottom: 0;
+  width: 124%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.hero-ragazza-scena.is-3d .hero-ragazza-canvas {
+  opacity: 1;
+}
+
+/* Nascosta ma ancora nel layout: continua a dare le dimensioni al riquadro */
+.hero-ragazza-scena.is-3d .hero-ragazza {
+  opacity: 0;
 }
 
 /* Desktop: ragazza posizionata in basso a sinistra, hero-bottom-text nascosto */
@@ -226,11 +257,14 @@
     gap: 12px;
   }
 
-  .hero-ragazza {
+  .hero-ragazza-scena {
     width: 50%;
-    height: auto;
-    flex-shrink: 0;
     margin-left: -4%;
+  }
+
+  .hero-ragazza {
+    width: 100%;
+    height: auto;
   }
 
   .hero-bottom-text {

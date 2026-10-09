@@ -4,6 +4,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("images");
   eleventyConfig.addPassthroughCopy("assets");
+  eleventyConfig.addPassthroughCopy("models");
   eleventyConfig.addPassthroughCopy("admin");
 
   // Passthrough: static HTML pages (non toccate da Eleventy)

@@ -170,6 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function aggiornaScalaHero() {
     if (!hero) return;
+    // Con il flyby 3D attivo la hero è fissata da ScrollTrigger: niente scale
+    if (hero.classList.contains('flyby-attivo')) return;
     const rect = hero.getBoundingClientRect();
     const vh = window.innerHeight || document.documentElement.clientHeight;
     // La transizione si distende su 1.6 altezze di viewport (invece di 1),

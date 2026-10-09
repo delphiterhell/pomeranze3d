@@ -1,0 +1,39 @@
+/* ===================================================
+   HERO-SCENA.CSS — Scena animata della hero (ragazza + zinnia)
+   Tutto è subordinato a .scena-attiva, aggiunta da js/hero-scena.js
+   solo quando modelli e foto sono pronti: senza quella classe la
+   hero resta quella statica con l'illustrazione e la foto originale.
+   =================================================== */
+
+/* Copia della foto senza la zinnia A: stessa inquadratura dello sfondo
+   (eredita object-fit e object-position da .hero-bg), compare in dissolvenza */
+.hero-bg-scena {
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.hero-viewport.scena-attiva .hero-bg-scena {
+  opacity: 1;
+}
+
+/* Canvas a tutta hero: sopra foto, velo e api, sotto testi e pulsanti */
+.hero-scena-3d {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.hero-viewport.scena-attiva .hero-scena-3d {
+  opacity: 1;
+}
+
+/* L'illustrazione sparisce ma resta nel layout: dà le misure alla scena */
+.hero-viewport.scena-attiva .hero-ragazza {
+  opacity: 0;
+}

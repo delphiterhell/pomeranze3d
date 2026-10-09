@@ -1,0 +1,78 @@
+/* ===================================================
+   HERO-FLYBY.CSS — Sequenza 3D della hero guidata dallo scroll
+   Tutto è subordinato a .flyby-attivo, aggiunta da js/hero-flyby.js
+   solo quando il modello è pronto: senza quella classe la hero
+   resta quella statica con l'illustrazione.
+   =================================================== */
+
+/* Sopra la foto e le api, sotto testi e pulsanti */
+.hero-scena-3d {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  display: block;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.hero-viewport.flyby-attivo .hero-scena-3d {
+  opacity: 1;
+}
+
+/* L'illustrazione sparisce ma resta nel layout: dà le misure alla scena 3D */
+.hero-viewport.flyby-attivo .hero-ragazza {
+  opacity: 0;
+}
+
+/* Il velo scuro si dirada con lo scroll: la foto del campo torna protagonista */
+.hero-viewport.flyby-attivo::after {
+  opacity: var(--velo, 1);
+}
+
+.hero-viewport.flyby-attivo .hero-bg {
+  will-change: transform;
+}
+
+/* ---------- Fogli di carta ritagliata ----------
+   Partono sotto la hero e salgono fino a coprirla: quello crema ha lo stesso
+   colore della sezione successiva, che così prosegue senza stacco. */
+.hero-carta {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 100%;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.hero-viewport.flyby-attivo .hero-carta {
+  display: block;
+}
+
+.hero-carta-verde {
+  z-index: 5;
+  background-color: var(--verde-chiaro);
+  color: var(--verde-chiaro);
+}
+
+.hero-carta-crema {
+  z-index: 6;
+  background-color: var(--crema);
+  color: var(--crema);
+}
+
+/* Bordo superiore irregolare, come un foglio tagliato a mano */
+.hero-carta-bordo {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% - 1px);
+  width: 100%;
+  height: clamp(44px, 8vw, 120px);
+  display: block;
+  fill: currentColor;
+}
