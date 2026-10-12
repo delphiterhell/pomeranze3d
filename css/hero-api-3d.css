@@ -1,0 +1,24 @@
+/* ===================================================
+   HERO-API-3D.CSS — Ritocchi della sola versione sperimentale
+   (index-api-3d.html). Non è caricato dalla homepage.
+   =================================================== */
+
+/* Mobile: la ragazza sale, per stare all'altezza delle zinnie della fotografia.
+   Si sposta il riquadro dell'illustrazione, da cui js/hero-scena-api.js prende le misure:
+   modello, zinnia, gesto ed erba in primo piano salgono insieme, già allineati.
+   Vale solo a scena avviata: l'illustrazione statica di ripiego ha la base tagliata
+   e deve restare appoggiata al bordo inferiore. */
+@media (max-width: 767px) {
+  .hero-viewport.scena-attiva .hero-ragazza-scena {
+    transform: translateY(calc(-1 * var(--salita-ragazza, 16svh)));
+  }
+}
+
+/* Schermi meno alti: sale un po' meno, per non arrivare con la testa sotto il titolo */
+@media (max-width: 767px) and (max-height: 800px) {
+  .hero-viewport { --salita-ragazza: 13svh; }
+}
+
+@media (max-width: 767px) and (max-height: 700px) {
+  .hero-viewport { --salita-ragazza: 10svh; }
+}

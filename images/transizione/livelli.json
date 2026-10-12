@@ -1,0 +1,58 @@
+{
+  "sorgente": "images/hero.webp",
+  "larghezza": 2048,
+  "altezza": 1360,
+  "profonditaSfondo": 12,
+  "livelli": [
+    {
+      "id": "a",
+      "nome": "spighe in alto a sinistra",
+      "file": "livello-a.webp",
+      "x": 0,
+      "y": 0,
+      "larghezza": 280,
+      "altezza": 395,
+      "profondita": 3.6
+    },
+    {
+      "id": "b",
+      "nome": "spiga sfocata in basso a sinistra",
+      "file": "livello-b.webp",
+      "x": 0,
+      "y": 811,
+      "larghezza": 330,
+      "altezza": 469,
+      "profondita": 4.2
+    },
+    {
+      "id": "c",
+      "nome": "spighe in basso al centro",
+      "file": "livello-c.webp",
+      "x": 351,
+      "y": 1011,
+      "larghezza": 554,
+      "altezza": 349,
+      "profondita": 5.6
+    },
+    {
+      "id": "d",
+      "nome": "grande spiga sfocata al centro",
+      "file": "livello-d.webp",
+      "x": 861,
+      "y": 846,
+      "larghezza": 444,
+      "altezza": 499,
+      "profondita": 4.8
+    },
+    {
+      "id": "e",
+      "nome": "zinnia sfocata a destra",
+      "file": "livello-e.webp",
+      "x": 1426,
+      "y": 876,
+      "larghezza": 289,
+      "altezza": 484,
+      "profondita": 6.6
+    }
+  ]
+}

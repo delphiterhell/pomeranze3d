@@ -48,7 +48,10 @@
   }
 
   /* ---------- Configurazioni api ----------
-     Mobile (<768px): 5 api distanziate; Desktop: 11 api          */
+     Mobile (<768px): 5 api distanziate; Desktop: 9 api.
+     Con data-api="meno" sul contenitore non partono quelle segnate "extra"
+     (ne restano 3 su mobile e 6 su desktop) e le altre partono da "vicino",
+     attorno alla ragazza: le passano accanto e dietro, coperte dalla scena animata. */
   // matchMedia usa la stessa soglia dei breakpoint CSS (max-width:767px),
   // più affidabile di window.innerWidth per restare sempre in sync col layout
   const mobile = window.matchMedia('(max-width: 767px)').matches;
@@ -60,39 +63,41 @@
   const configApi = mobile
     ? [
         // Mobile: la ragazza occupa il basso-sinistra, il bottone è nascosto
-        { startX: 45, startY: 12, animazione: 'vola-1', durata: '10s', ritardo: '-2s', dimensione: '24px' },
-        { startX: 70, startY: 8,  animazione: 'vola-5', durata: '9s',  ritardo: '0s',  dimensione: '34px' },
-        { startX: 90, startY: 20, animazione: 'vola-4', durata: '11s', ritardo: '-6s', dimensione: '26px' },
-        { startX: 60, startY: 62, animazione: 'vola-9', durata: '13s', ritardo: '-3s', dimensione: '28px' },
-        { startX: 82, startY: 80, animazione: 'vola-2', durata: '12s', ritardo: '-9s', dimensione: '30px' },
+        { startX: 45, startY: 12, animazione: 'vola-1', durata: '10s', ritardo: '-2s', dimensione: '24px', vicino: [48, 50] },
+        { startX: 70, startY: 8,  animazione: 'vola-5', durata: '9s',  ritardo: '0s',  dimensione: '34px', extra: true },
+        { startX: 90, startY: 20, animazione: 'vola-4', durata: '11s', ritardo: '-6s', dimensione: '26px', vicino: [72, 22] },
+        { startX: 60, startY: 62, animazione: 'vola-9', durata: '13s', ritardo: '-3s', dimensione: '28px', extra: true },
+        { startX: 82, startY: 80, animazione: 'vola-2', durata: '12s', ritardo: '-9s', dimensione: '30px', vicino: [58, 70] },
       ]
     : [
         // Desktop: 9 api su una griglia sfalsata, ognuna con una traiettoria diversa
         // (vola-1..9 in components.css), distribuite su tutta l'altezza/larghezza,
         // fuori dalla zona della ragazza (sinistra) e dalla zona del bottone (basso-destra)
-        { startX: 42, startY: 10, animazione: 'vola-1', durata: '9s',  ritardo: '0s',  dimensione: '36px' },
+        { startX: 42, startY: 10, animazione: 'vola-1', durata: '9s',  ritardo: '0s',  dimensione: '36px', vicino: [30, 14] },
         // Traiettoria lunga: giro grande e tondo
-        { startX: 62, startY: 10, animazione: 'vola-10', durata: '18s', ritardo: '-4s', dimensione: '30px' },
-        { startX: 82, startY: 10, animazione: 'vola-3', durata: '10s', ritardo: '-7s', dimensione: '34px' },
+        { startX: 62, startY: 10, animazione: 'vola-10', durata: '18s', ritardo: '-4s', dimensione: '30px', extra: true },
+        { startX: 82, startY: 10, animazione: 'vola-3', durata: '10s', ritardo: '-7s', dimensione: '34px', vicino: [60, 10] },
         // Traiettoria lunga: giro largo e schiacciato
-        { startX: 52, startY: 35, animazione: 'vola-11', durata: '19s', ritardo: '-2s', dimensione: '32px' },
-        { startX: 72, startY: 35, animazione: 'vola-5', durata: '12s', ritardo: '-6s', dimensione: '28px' },
-        { startX: 42, startY: 60, animazione: 'vola-6', durata: '14s', ritardo: '-3s', dimensione: '34px' },
+        { startX: 52, startY: 35, animazione: 'vola-11', durata: '19s', ritardo: '-2s', dimensione: '32px', vicino: [38, 32] },
+        { startX: 72, startY: 35, animazione: 'vola-5', durata: '12s', ritardo: '-6s', dimensione: '28px', vicino: [46, 50] },
+        { startX: 42, startY: 60, animazione: 'vola-6', durata: '14s', ritardo: '-3s', dimensione: '34px', extra: true },
         // Traiettoria lunga: giro alto e stretto
-        { startX: 62, startY: 60, animazione: 'vola-12', durata: '17s', ritardo: '-8s', dimensione: '30px' },
-        { startX: 52, startY: 85, animazione: 'vola-8', durata: '12s', ritardo: '-5s', dimensione: '36px' },
-        { startX: 72, startY: 85, animazione: 'vola-9', durata: '13s', ritardo: '-10s', dimensione: '30px' },
+        { startX: 62, startY: 60, animazione: 'vola-12', durata: '17s', ritardo: '-8s', dimensione: '30px', vicino: [40, 66] },
+        { startX: 52, startY: 85, animazione: 'vola-8', durata: '12s', ritardo: '-5s', dimensione: '36px', vicino: [36, 86] },
+        { startX: 72, startY: 85, animazione: 'vola-9', durata: '13s', ritardo: '-10s', dimensione: '30px', extra: true },
       ];
 
   /* ---------- Creazione delle api nel DOM ---------- */
-  configApi.forEach((cfg) => {
+  const meno = contenitore.dataset.api === 'meno';
+  configApi.filter((cfg) => !(meno && cfg.extra)).forEach((cfg) => {
     const wrapper = document.createElement('div');
     wrapper.className = 'ape';
     wrapper.innerHTML = creaSvgApe();
 
     /* Posizione di partenza (percentuale rispetto al contenitore) */
-    wrapper.style.left = `${cfg.startX}%`;
-    wrapper.style.top  = `${cfg.startY}%`;
+    const [x, y] = meno && cfg.vicino ? cfg.vicino : [cfg.startX, cfg.startY];
+    wrapper.style.left = `${x}%`;
+    wrapper.style.top  = `${y}%`;
     wrapper.style.width = cfg.dimensione;
 
     /* Animazione volo */

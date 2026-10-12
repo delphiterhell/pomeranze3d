@@ -1,0 +1,371 @@
+﻿<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Pomeranze coltiva fiori di campo con amore. Bouquet freschi, laboratori floreali e molto altro dal suo campo in campagna.">
+  <title>Pomeranze – Fiori di campo</title>
+
+  <!-- Font: Barrio (titoli) da Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barrio&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/hero-scena.css">
+  <!-- PROVA: transizione dalla hero al campo reale (non ancora nella homepage) -->
+  <link rel="stylesheet" href="css/transizione.css">
+  <meta name="robots" content="noindex">
+
+  <!-- Netlify Identity (gestisce invite_token e recovery_token) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <a href="index.html" class="logo-nome" aria-label="Pomeranze – torna alla home">
+        <img src="images/pomeranzelogo.png" alt="Pomeranze" class="logo-img">
+      </a>
+
+      <button class="hamburger" aria-controls="navigazione-principale"
+              aria-expanded="false" aria-label="Apri menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+      <nav class="site-nav" id="navigazione-principale" aria-label="Navigazione principale">
+        <button class="nav-chiudi" aria-label="Chiudi menu">✕</button>
+        <a href="index.html">Home</a>
+        <a href="chi-sono.html">Chi sono</a>
+        <a href="prodotti.html">Prodotti</a>
+        <a href="workshop.html">Workshop</a>
+        <a href="blog.html">Blog</a>
+        <a href="contatti.html">Contatti</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ===== HERO A TUTTA FINESTRA ===== -->
+    <section class="hero-viewport" aria-labelledby="hero-titolo">
+
+      <!-- Sfondo: campo di fiori, si ritaglia liberamente -->
+      <img
+        src="images/fioricampo.webp"
+        alt=""
+        class="hero-bg"
+        aria-hidden="true"
+      >
+
+      <!-- Stessa foto senza la zinnia A (che nella scena animata sta accanto alla ragazza):
+           caricata e mostrata da js/hero-scena.js solo quando la scena è pronta -->
+      <img
+        data-src="images/hero-senza-zinnia-A.webp"
+        alt=""
+        class="hero-bg hero-bg-scena"
+        aria-hidden="true"
+      >
+
+      <!-- PROVA: lo stesso campo a livelli (sfondo + vegetazione ritagliata), mosso dallo scroll (js/transizione.js) -->
+      <canvas class="tr-profondita" aria-hidden="true"></canvas>
+
+      <div class="api-container" aria-hidden="true"></div>
+
+      <!-- Scena animata: ragazza, zinnia fotografica ed erba in primo piano (js/hero-scena.js) -->
+      <canvas class="hero-scena-3d" aria-hidden="true"></canvas>
+
+      <div class="hero-velo">
+        <div class="hero-testo">
+          <h1 id="hero-titolo" class="hero-titolo-grande">Fiori che profumano<br class="mobile-br"> di campo</h1>
+          <p class="hero-sottotitolo hero-desktop-only">Ogni fiore nasce nel rispetto della terra, degli impollinatori e dei ritmi della natura. Perché coltivare significa prendersi cura di un ecosistema, non solo di un raccolto.</p>
+          <a href="#prodotti" class="btn btn-salvia btn-pillola hero-desktop-only">Scopri i fiori</a>
+        </div>
+        <div class="hero-bottom-row">
+          <!-- L'illustrazione resta come fallback e dà le misure alla scena animata -->
+          <div class="hero-ragazza-scena">
+            <img
+              src="images/ragazza.webp"
+              alt="Illustrazione di Clelia nel campo"
+              class="hero-ragazza"
+            >
+          </div>
+          <div class="hero-bottom-text">
+            <p class="hero-sottotitolo">Ogni fiore nasce nel rispetto della terra, degli impollinatori e dei ritmi della natura. Perché coltivare significa prendersi cura di un ecosistema, non solo di un raccolto.</p>
+            <a href="#prodotti" class="btn btn-salvia btn-pillola">Scopri i fiori</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-scroll-indicator" aria-hidden="true">
+        <div class="hero-scroll-chevron"></div>
+      </div>
+
+      <!-- PROVA: fondo della sezione successiva e nuova inquadratura (la foto della sezione "Chi sono") -->
+      <div class="tr-crema" aria-hidden="true"></div>
+      <div class="tr-foto" aria-hidden="true">
+        <img data-src="images/cleppi2.webp" alt="">
+      </div>
+
+    </section>
+
+    <!-- ===== CHI SONO (anteprima) ===== -->
+    <section id="chi-sono" class="sezione sezione-sfondo-bianco" aria-labelledby="titolo-chi-sono">
+      <div class="container">
+        <div class="foglia-divisore foglia-chisono co-foglia" aria-hidden="true"><svg width="56" height="48" viewBox="0 0 56 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 41C8 35.6316 11.8948 31.4084 18.6949 30.2632C23.7897 29.4042 29.0529 26.6842 31.1582 24.8947M26.9471 39.2105C23.2503 39.22 19.6843 38.0483 16.9564 35.9276C14.2285 33.8069 12.538 30.8922 12.22 27.7617C11.902 24.6311 12.9799 21.5133 15.2399 19.0266C17.4998 16.5399 20.7767 14.866 24.4207 14.3368C36.4209 12.3684 39.5788 11.4379 43.7894 7C45.8947 10.5789 48 14.48 48 21.3158C48 31.1579 37.9367 39.2105 26.9471 39.2105Z" stroke="#B8C99A" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+
+        <div class="chi-sono-griglia">
+
+          <div class="co-foto">
+            <div class="chi-sono-foto-cornice">
+              <div class="chi-sono-foto-mask">
+                <img src="images/cleppi2.webp" alt="Clelia nel campo tra i fiori" class="chi-sono-foto-img">
+              </div>
+            </div>
+          </div>
+
+          <div class="co-testo">
+            <div class="sezione-label-row" style="margin-bottom:1.25rem;">
+              <span class="sezione-trattino co-linea" aria-hidden="true">—</span>
+              <span class="sezione-label co-label">Chi sono</span>
+            </div>
+            <h2 id="titolo-chi-sono" class="co-titolo"><span class="co-word">Dietro </span><span class="co-word">ogni </span><span class="co-word">mazzo </span><span class="co-word">c'è </span><span class="co-word">una </span><span class="co-word">storia </span><span class="co-word">che </span><span class="co-word">cresce </span><span class="co-word">dalla </span><span class="co-word">terra.</span></h2>
+            <p class="co-para">Qualche riga su di te: chi sei, da dove vieni, cosa ti ha portata a fare questo lavoro. Scrivi con la tua voce, senza fretta.</p>
+            <p class="co-para">Un secondo paragrafo per raccontare il tuo modo di lavorare, i tuoi valori o cosa rende speciale il tuo campo.</p>
+            <a href="chi-sono.html" class="link-testo co-cta">La mia storia →</a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== IL MIO CAMPO — split foto + testo ===== -->
+    <section class="sezione-campo-split" aria-label="Il mio campo">
+
+      <div class="campo-split-foto rivela">
+        <img
+          src="images/drone.webp"
+          alt="Vista aerea del campo di fiori di Pomeranze"
+        >
+      </div>
+
+      <div class="campo-split-testo rivela">
+        <div class="sezione-label-row">
+          <!-- <span class="sezione-trattino" aria-hidden="true">—</span> -->
+   <!--        <span class="sezione-label">Il mio campo</span> -->
+        </div>
+        <h2>Il mio campo</h2>
+        <p>Un angolo protetto di biodiversità, coltivato con amore e rispetto per i ritmi lenti della natura. Qui crescono fiori di stagione, erbe aromatiche e piccoli frutti, circondati dal ronzio delle api e dal profumo della terra.</p>
+      </div>
+
+    </section>
+
+    <!-- ===== DIVISORE CREMA CON FOGLIA ===== -->
+    <div class="divisore-crema" aria-hidden="true">
+      <div class="foglia-divisore"><svg width="56" height="48" viewBox="0 0 56 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 41C8 35.6316 11.8948 31.4084 18.6949 30.2632C23.7897 29.4042 29.0529 26.6842 31.1582 24.8947M26.9471 39.2105C23.2503 39.22 19.6843 38.0483 16.9564 35.9276C14.2285 33.8069 12.538 30.8922 12.22 27.7617C11.902 24.6311 12.9799 21.5133 15.2399 19.0266C17.4998 16.5399 20.7767 14.866 24.4207 14.3368C36.4209 12.3684 39.5788 11.4379 43.7894 7C45.8947 10.5789 48 14.48 48 21.3158C48 31.1579 37.9367 39.2105 26.9471 39.2105Z" stroke="#B8C99A" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+    </div>
+
+    <!-- ===== PRODOTTI (anteprima) ===== -->
+    <section id="prodotti" class="sezione sezione-sfondo-verde" aria-labelledby="titolo-prodotti">
+      <div class="container">
+
+        <div class="sezione-header-row rivela">
+          <div>
+            <div class="sezione-label-row">
+            </div>
+            <h2 id="titolo-prodotti">Cosa coltivo con cura</h2>
+            <p>Dal campo direttamente a te: fiori, miele e qualcosa di speciale.</p>
+          </div>
+          <a href="prodotti.html" class="link-vedi-tutti">Scopri tutti i prodotti →</a>
+        </div>
+
+        <div class="griglia-4">
+
+          <a href="prodotti.html#fiori-recisi" class="card rivela" style="text-decoration:none;">
+            <img src="images/recisi2.webp" alt="Fiori recisi" class="card-img">
+            <div class="card-body">
+              <h3 class="card-titolo">Fiori recisi</h3>
+              <p class="card-testo">Mazzi di stagione, raccolti a mano ogni mattina.</p>
+            </div>
+          </a>
+
+          <a href="prodotti.html#fiori-edibili" class="card rivela" style="text-decoration:none;">
+            <img src="images/edibili2.webp" alt="Fiori edibili" class="card-img">
+            <div class="card-body">
+              <h3 class="card-titolo">Fiori edibili</h3>
+              <p class="card-testo">Fiori commestibili per colorare i tuoi piatti.</p>
+            </div>
+          </a>
+
+          <a href="prodotti.html#miele" class="card rivela" style="text-decoration:none;">
+            <img src="images/arnie.webp" alt="Miele del campo" class="card-img card-img-miele">
+            <div class="card-body">
+              <h3 class="card-titolo">Miele del campo</h3>
+              <p class="card-testo">Dal campo e dalle sue api, in piccole quantità.</p>
+            </div>
+          </a>
+
+          <a href="prodotti.html#kombucha" class="card rivela" style="text-decoration:none;">
+            <img src="images/kombucha.png" alt="Kombucha fatta in casa" class="card-img">
+            <div class="card-body">
+              <h3 class="card-titolo">Kombucha</h3>
+              <p class="card-testo">Bevanda viva e frizzante, fermentata in casa.</p>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== WORKSHOP (anteprima) ===== -->
+    <section id="workshop" class="sezione sezione-sfondo-bianco" aria-labelledby="titolo-workshop">
+      <div class="container">
+        <div class="foglia-divisore foglia-workshop" aria-hidden="true"><svg width="56" height="48" viewBox="0 0 56 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 41C8 35.6316 11.8948 31.4084 18.6949 30.2632C23.7897 29.4042 29.0529 26.6842 31.1582 24.8947M26.9471 39.2105C23.2503 39.22 19.6843 38.0483 16.9564 35.9276C14.2285 33.8069 12.538 30.8922 12.22 27.7617C11.902 24.6311 12.9799 21.5133 15.2399 19.0266C17.4998 16.5399 20.7767 14.866 24.4207 14.3368C36.4209 12.3684 39.5788 11.4379 43.7894 7C45.8947 10.5789 48 14.48 48 21.3158C48 31.1579 37.9367 39.2105 26.9471 39.2105Z" stroke="#B8C99A" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="workshop-split">
+
+          <div class="workshop-foto-col rivela">
+            <img src="images/maninelcampo.webp" alt="Clelia nel campo tra i fiori">
+          </div>
+
+          <div class="rivela">
+            <div class="sezione-label-row">
+            <!--   <span class="sezione-bee" aria-hidden="true">🐝</span> -->
+              <span class="sezione-label">Laboratori manuali</span>
+            </div>
+            <h2 id="titolo-workshop">Vieni a creare con le mani nella terra</h2>
+            <p>Pomeriggi tra le aiuole, corone di fiori freschi, bouquet selvatici. Nessuna esperienza richiesta — solo voglia di stare nel verde e portarsi qualcosa di bello a casa.</p>
+            <a href="workshop.html" class="btn btn-salvia" style="margin-top: 0.75rem;">Scopri i workshop →</a>
+          </div>
+
+        </div>
+        <div class="foglia-divisore foglia-bottom" aria-hidden="true"><svg width="56" height="48" viewBox="0 0 56 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 41C8 35.6316 11.8948 31.4084 18.6949 30.2632C23.7897 29.4042 29.0529 26.6842 31.1582 24.8947M26.9471 39.2105C23.2503 39.22 19.6843 38.0483 16.9564 35.9276C14.2285 33.8069 12.538 30.8922 12.22 27.7617C11.902 24.6311 12.9799 21.5133 15.2399 19.0266C17.4998 16.5399 20.7767 14.866 24.4207 14.3368C36.4209 12.3684 39.5788 11.4379 43.7894 7C45.8947 10.5789 48 14.48 48 21.3158C48 31.1579 37.9367 39.2105 26.9471 39.2105Z" stroke="#B8C99A" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      </div>
+    </section>
+
+    <!-- ===== BLOG (anteprima) ===== -->
+    <section id="blog" class="sezione sezione-sfondo-verde" aria-labelledby="titolo-blog">
+      <div class="container">
+
+        <div class="sezione-label-row rivela">
+        </div>
+        <h2 id="titolo-blog" class="rivela" style="margin-bottom: 2rem;">Dal campo</h2>
+
+        <div class="blog-griglia">
+
+          <article class="blog-card rivela">
+            <img src="images/articolouno.webp" alt="Come far durare i fiori recisi" class="blog-card-img">
+            <div class="blog-card-body">
+              <span class="tag">Consigli</span>
+              <h3 class="blog-card-titolo"><a href="blog.html" style="color:inherit;text-decoration:none;">Come far durare i fiori recisi più a lungo</a></h3>
+              <p class="blog-card-testo">Piccoli trucchi che uso ogni giorno per tenere i bouquet freschi per una settimana intera.</p>
+              <a href="blog.html" class="link-leggi">Leggi →</a>
+            </div>
+          </article>
+
+          <article class="blog-card rivela">
+            <img src="images/articolodue.webp" alt="I fiori da seminare adesso" class="blog-card-img">
+            <div class="blog-card-body">
+              <span class="tag">Coltivazione</span>
+              <h3 class="blog-card-titolo"><a href="blog.html" style="color:inherit;text-decoration:none;">I fiori da seminare adesso per avere colore tutta estate</a></h3>
+              <p class="blog-card-testo">Zinnie, girasoli, cosmos: la mia lista dei semenzali preferiti e quando piantarli.</p>
+              <a href="blog.html" class="link-leggi">Leggi →</a>
+            </div>
+          </article>
+
+          <article class="blog-card rivela">
+            <img src="images/articolotre.webp" alt="Una giornata nel campo" class="blog-card-img">
+            <div class="blog-card-body">
+              <span class="tag">Vita nel campo</span>
+              <h3 class="blog-card-titolo"><a href="blog.html" style="color:inherit;text-decoration:none;">Com'è una giornata nel mio campo</a></h3>
+              <p class="blog-card-testo">Dalle sei del mattino al tramonto: la mia routine quotidiana tra annaffiature, raccolte e ordini.</p>
+              <a href="blog.html" class="link-leggi">Leggi →</a>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="testo-centrato rivela">
+          <a href="blog.html" class="btn btn-outline">Scopri tutti gli articoli →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== SCRIVIMI ===== -->
+    <section id="contatti" class="sezione sezione-sfondo-bianco" aria-labelledby="titolo-contatti">
+      <div class="container">
+        <div class="foglia-divisore foglia-chisono" aria-hidden="true"><svg width="56" height="48" viewBox="0 0 56 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 41C8 35.6316 11.8948 31.4084 18.6949 30.2632C23.7897 29.4042 29.0529 26.6842 31.1582 24.8947M26.9471 39.2105C23.2503 39.22 19.6843 38.0483 16.9564 35.9276C14.2285 33.8069 12.538 30.8922 12.22 27.7617C11.902 24.6311 12.9799 21.5133 15.2399 19.0266C17.4998 16.5399 20.7767 14.866 24.4207 14.3368C36.4209 12.3684 39.5788 11.4379 43.7894 7C45.8947 10.5789 48 14.48 48 21.3158C48 31.1579 37.9367 39.2105 26.9471 39.2105Z" stroke="#B8C99A" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="sezione-header testo-centrato rivela">
+          <h2 id="titolo-contatti">Scrivimi</h2>
+          <p>Per ordini, informazioni o solo per un saluto dal campo.</p>
+        </div>
+        <div class="testo-centrato rivela" style="margin-top: 1.5rem;">
+          <a href="contatti.html" class="btn btn-accento">Vai alla pagina contatti →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+
+        <div class="footer-brand">
+          <a href="index.html" class="logo-nome">
+            <img src="images/pomeranzelogo.png" alt="Pomeranze" class="logo-img">
+          </a>
+          <p>Fiori di campo coltivati con cura,<br>direttamente dalla terra alla tua tavola.</p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Navigazione footer">
+          <h3>Pagine</h3>
+          <a href="chi-sono.html">Chi sono</a>
+          <a href="prodotti.html">Prodotti</a>
+          <a href="workshop.html">Workshop</a>
+          <a href="blog.html">Blog</a>
+          <a href="contatti.html">Contatti</a>
+        </nav>
+
+        <div class="footer-social">
+          <h3>Seguimi</h3>
+          <ul>
+            <li><a href="#" aria-label="Instagram di Clelia">Instagram</a></li>
+            <li><a href="#" aria-label="Facebook di Clelia">Facebook</a></li>
+            <li><a href="#" aria-label="LinkedIn di Clelia">LinkedIn</a></li>
+          </ul>
+        </div>
+
+      </div>
+      <p class="footer-bottom">© <span id="anno"></span> Pomeranze – Fiori di campo. Con amore dalla campagna.</p>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script src="js/main.js"></script>
+  <script src="js/bees.js"></script>
+  <script src="js/chi-sono-anim.js"></script>
+  <!-- Three.js (solo per la scena animata della hero) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
+        "gsap": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/index.js",
+        "gsap/ScrollTrigger": "https://cdn.jsdelivr.net/npm/gsap@3.12.5/ScrollTrigger.js"
+      }
+    }
+  </script>
+  <script type="module" src="js/hero-scena.js"></script>
+  <!-- PROVA: transizione guidata dallo scroll -->
+  <script type="module" src="js/transizione.js"></script>
+  <script>document.getElementById('anno').textContent = new Date().getFullYear();</script>
+
+</body>
+</html>
