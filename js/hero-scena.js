@@ -25,13 +25,18 @@ const CONFIG = {
   quotaFigura: 0.84,
   taglioBase: 0.03,
 
-  attesaIniziale: 0.9,   // secondi fermi prima del primo gesto
-  pausaTraCicli: 3.5,    // secondi di riposo tra un gesto e il successivo
+  attesaIniziale: 1.5,   // secondi fermi, a scena caricata, prima del gesto (uno solo per caricamento)
+  ritornoRiposo: 0.8,    // secondi di dissolvenza dall'ultimo fotogramma alla posa iniziale
 
   // Vegetazione in primo piano, in frazioni dell'altezza del busto dal bordo inferiore:
   // comincia a comparire a "alto" e copre del tutto sotto "pieno".
   // L'erba più luminosa passa davanti per prima, i vuoti scuri lasciano vedere la figura.
   erba: { alto: 0.40, pieno: 0.04, pesoQuota: 0.9, pesoLuce: 0.9, soglia0: 0.5, soglia1: 0.8 },
+
+  // Solo smartphone (max-width 767px): la ragazza cresce e sale, zinnia ed erba con lei.
+  // Scala e salita sono obiettivi: se lo schermo è basso si riducono, perché la testa
+  // resti almeno "distanzaTitolo" px sotto il titolo. L'erba copre un po' meno busto.
+  mobile: { scala: 1.38, salita: 0.07, distanzaTitolo: 16, erbaAlto: 0.32 },
 
   // Velo scuro della hero (.hero-viewport::after in components.css): va replicato sull'erba
   velo: { colore: [20, 30, 10], inizio: 0.05, meta: 0.40, fine: 0.60 },
@@ -41,6 +46,7 @@ const hero = document.querySelector('.hero-viewport');
 const canvas = hero && hero.querySelector('.hero-scena-3d');
 const illustrazione = hero && hero.querySelector('.hero-ragazza');
 const fotoScena = hero && hero.querySelector('.hero-bg-scena');
+const titolo = hero && hero.querySelector('#hero-titolo');
 
 function puoPartire() {
   if (!hero || !canvas || !illustrazione || !fotoScena) return false;
@@ -96,6 +102,54 @@ function caricaImmagine(img, src) {
     img.addEventListener('load', () => risolvi(), { once: true });
     img.addEventListener('error', () => rifiuta(new Error('foto non caricata: ' + src)), { once: true });
     img.src = src;
+  });
+}
+
+const schermoMobile = window.matchMedia('(max-width: 767px)');
+
+/* Smartphone: il riquadro da cui la scena prende le misure si ingrandisce
+   attorno al suo angolo in basso a sinistra e sale. Ragazza, zinnia ed erba
+   ne seguono le misure, quindi crescono insieme e il fiore resta sul naso.
+   L'illustrazione di ripiego e il layout non cambiano: è solo un calcolo. */
+function ritoccoMobile(riquadro, rHero, mobile) {
+  if (!mobile) return riquadro;
+  const m = CONFIG.mobile;
+  const rTitolo = titolo && titolo.getBoundingClientRect();
+  const limite = rTitolo && rTitolo.height ? rTitolo.bottom - rHero.top + m.distanzaTitolo : 0;
+  const figura = riquadro.altezza * CONFIG.quotaFigura;   // altezza della ragazza vera e propria
+  // Prima si rinuncia alla salita, poi, se ancora non c'è spazio, a parte dell'ingrandimento
+  const salita = Math.max(0, Math.min(rHero.height * m.salita, riquadro.basso - limite - figura * m.scala));
+  const scala = Math.max(1, Math.min(m.scala, (riquadro.basso - salita - limite) / figura));
+  return {
+    sinistra: riquadro.sinistra,
+    basso: riquadro.basso - salita,
+    larghezza: riquadro.larghezza * scala,
+    altezza: riquadro.altezza * scala,
+  };
+}
+
+/* Il gesto "Annusa_fiore" una sola volta (LoopOnce, fermo sull'ultimo fotogramma).
+   Il busto torna da solo alla posa iniziale, il foulard si ferma un po' più in là
+   (fino a 1,3°): alla fine si dissolve verso una posa ferma ricavata dal primo
+   fotogramma della clip stessa, senza toccare il GLB */
+function avviaGesto(mixer, clip, ritorno) {
+  const gesto = mixer.clipAction(clip);
+  gesto.setLoop(THREE.LoopOnce, 1);
+  gesto.clampWhenFinished = true;
+  gesto.play();
+
+  const tracceRiposo = clip.tracks.map((traccia) => {
+    const n = traccia.getValueSize();
+    return new traccia.constructor(traccia.name, [0], Array.from(traccia.values.slice(0, n)));
+  });
+  // Durata 1 e non 0: con durata nulla il mixer dividerebbe per zero nel calcolo dei giri
+  const riposo = mixer.clipAction(new THREE.AnimationClip(clip.name + '_riposo', 1, tracceRiposo));
+
+  mixer.addEventListener('finished', function fine(evento) {
+    if (evento.action !== gesto) return;
+    mixer.removeEventListener('finished', fine);
+    riposo.play();
+    riposo.crossFadeFrom(gesto, ritorno, false);
   });
 }
 
@@ -196,7 +250,8 @@ async function avvia() {
     renderer.setSize(rHero.width, rHero.height, false);
 
     const misureHero = { larghezza: rHero.width, altezza: rHero.height };
-    const riquadro = { sinistra: rIll.left - rHero.left, basso: rIll.bottom - rHero.top, larghezza: rIll.width, altezza: rIll.height };
+    const mobile = schermoMobile.matches;
+    const riquadro = ritoccoMobile({ sinistra: rIll.left - rHero.left, basso: rIll.bottom - rHero.top, larghezza: rIll.width, altezza: rIll.height }, rHero, mobile);
     const cam = calcolaCamera(misureHero, riquadro, CONFIG.quotaFigura, CONFIG.taglioBase);
     camera.left = -cam.mezzaLarghezza;
     camera.right = cam.mezzaLarghezza;
@@ -215,14 +270,13 @@ async function avvia() {
     u.uBasso.value = riquadro.basso;
     u.uBusto.value = riquadro.altezza * CONFIG.quotaFigura;
     u.uLimiteX.value = riquadro.sinistra + riquadro.larghezza * 1.35;
+    u.uErba.value.x = mobile ? CONFIG.mobile.erbaAlto : CONFIG.erba.alto;
   }
 
   /* ---------- Animazioni ---------- */
   const mixerRagazza = new THREE.AnimationMixer(ragazza);
   const clipRagazza = gltfRagazza.animations[0];
-  if (clipRagazza) mixerRagazza.clipAction(clipRagazza).play();
-  const durata = clipRagazza ? clipRagazza.duration : 0;
-  const ciclo = durata + CONFIG.pausaTraCicli;
+  if (clipRagazza) avviaGesto(mixerRagazza, clipRagazza, CONFIG.ritornoRiposo);
 
   // Il vento sulla zinnia non si ferma mai: la clip torna al punto di partenza, quindi si ripete senza stacchi
   const mixerZinnia = new THREE.AnimationMixer(zinnia);
@@ -239,9 +293,9 @@ async function avvia() {
     const dt = Math.min(orologio.getDelta(), 0.1);
     tempo += dt;
 
-    // Gesto completo (nota il fiore, si gira, si china, annusa, torna), poi una pausa a riposo
-    const tCiclo = durata > 0 ? Math.max(0, tempo) % ciclo : 0;
-    mixerRagazza.setTime(Math.min(tCiclo, durata));
+    // Gesto completo (nota il fiore, si gira, si china, annusa, torna) una sola volta, dopo l'attesa:
+    // l'orologio avanza solo a scena visibile, quindi scroll, schede e resize lo sospendono senza riavviarlo
+    mixerRagazza.update(Math.max(0, Math.min(dt, tempo)));
     mixerZinnia.update(dt);
 
     renderer.render(scena, camera);
@@ -266,6 +320,8 @@ async function avvia() {
   document.addEventListener('visibilitychange', aggiornaCiclo);
   new ResizeObserver(inquadra).observe(hero);
   new ResizeObserver(inquadra).observe(illustrazione);
+  // Su mobile la ragazza si ferma sotto il titolo, che cambia altezza quando arriva il suo font
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(inquadra);
 
   canvas.addEventListener('webglcontextlost', (evento) => {
     evento.preventDefault();

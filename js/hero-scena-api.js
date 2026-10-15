@@ -35,8 +35,9 @@ const CONFIG = {
   quotaFigura: 0.84,
   taglioBase: 0.03,
 
-  attesaIniziale: 0.9,   // secondi fermi prima del primo gesto
-  pausaTraCicli: 3.5,    // secondi di riposo tra un gesto e il successivo
+  attesaIniziale: 1.5,   // secondi fermi, a scena caricata, prima del gesto (uno solo per caricamento)
+  ritornoRiposo: 0.8,    // secondi di dissolvenza dall'ultimo fotogramma alla posa iniziale
+  pausaTraCicli: 3.5,    // ritmo dei voli delle api 3D (gesto + pausa), indipendente dalla ragazza
 
   // Vegetazione in primo piano, in frazioni dell'altezza del busto dal bordo inferiore:
   // comincia a comparire a "alto" e copre del tutto sotto "pieno".
@@ -117,6 +118,31 @@ function caricaImmagine(img, src) {
     img.addEventListener('load', () => risolvi(), { once: true });
     img.addEventListener('error', () => rifiuta(new Error('foto non caricata: ' + src)), { once: true });
     img.src = src;
+  });
+}
+
+/* Il gesto "Annusa_fiore" una sola volta (LoopOnce, fermo sull'ultimo fotogramma).
+   Il busto torna da solo alla posa iniziale, il foulard si ferma un po' più in là
+   (fino a 1,3°): alla fine si dissolve verso una posa ferma ricavata dal primo
+   fotogramma della clip stessa, senza toccare il GLB */
+function avviaGesto(mixer, clip, ritorno) {
+  const gesto = mixer.clipAction(clip);
+  gesto.setLoop(THREE.LoopOnce, 1);
+  gesto.clampWhenFinished = true;
+  gesto.play();
+
+  const tracceRiposo = clip.tracks.map((traccia) => {
+    const n = traccia.getValueSize();
+    return new traccia.constructor(traccia.name, [0], Array.from(traccia.values.slice(0, n)));
+  });
+  // Durata 1 e non 0: con durata nulla il mixer dividerebbe per zero nel calcolo dei giri
+  const riposo = mixer.clipAction(new THREE.AnimationClip(clip.name + '_riposo', 1, tracceRiposo));
+
+  mixer.addEventListener('finished', function fine(evento) {
+    if (evento.action !== gesto) return;
+    mixer.removeEventListener('finished', fine);
+    riposo.play();
+    riposo.crossFadeFrom(gesto, ritorno, false);
   });
 }
 
@@ -268,9 +294,8 @@ async function avvia() {
   /* ---------- Animazioni ---------- */
   const mixerRagazza = new THREE.AnimationMixer(ragazza);
   const clipRagazza = gltfRagazza.animations[0];
-  if (clipRagazza) mixerRagazza.clipAction(clipRagazza).play();
+  if (clipRagazza) avviaGesto(mixerRagazza, clipRagazza, CONFIG.ritornoRiposo);
   const durata = clipRagazza ? clipRagazza.duration : 0;
-  const ciclo = durata + CONFIG.pausaTraCicli;
 
   // Le api volano con lo stesso orologio: la visitatrice arriva sulla zinnia durante la pausa
   // Modalità di prova, dall'indirizzo: ?demo = solo l'ape che passa vicino alla telecamera,
@@ -310,9 +335,9 @@ async function avvia() {
     const dt = Math.min(orologio.getDelta(), 0.1);
     tempo += dt;
 
-    // Gesto completo (nota il fiore, si gira, si china, annusa, torna), poi una pausa a riposo
-    const tCiclo = durata > 0 ? Math.max(0, tempo) % ciclo : 0;
-    mixerRagazza.setTime(Math.min(tCiclo, durata));
+    // Gesto completo (nota il fiore, si gira, si china, annusa, torna) una sola volta, dopo l'attesa:
+    // l'orologio avanza solo a scena visibile, quindi scroll, schede e resize lo sospendono senza riavviarlo
+    mixerRagazza.update(Math.max(0, Math.min(dt, tempo)));
     mixerZinnia.update(dt);
     if (api) api.aggiorna(tempo, dt);
     if (riquadroProva) {
