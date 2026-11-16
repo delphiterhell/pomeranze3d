@@ -12,6 +12,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("chi-sono.html");
   eleventyConfig.addPassthroughCopy("prodotti.html");
   eleventyConfig.addPassthroughCopy("contatti.html");
+  eleventyConfig.addPassthroughCopy("privacy-policy.html");
 
   // Filtro Netlify Image CDN: CDN su Netlify, path diretto in locale
   eleventyConfig.addFilter("imgCDN", function (src, width = 1600, quality = 82) {

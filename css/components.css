@@ -1331,3 +1331,84 @@
   flex-shrink: 0;
   margin-top: 0.1rem;
 }
+
+/* ===== PRIVACY POLICY ===== */
+.privacy-aggiornamento {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  margin-bottom: 0;
+}
+
+.privacy-testo {
+  max-width: 68ch;
+  margin-inline: auto;
+}
+
+.privacy-testo h2 {
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  margin-top: 3rem;
+  margin-bottom: 0.9rem;
+}
+
+.privacy-testo .privacy-sottotitolo {
+  font-family: var(--font-corpo);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.privacy-testo ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.privacy-testo li {
+  line-height: 1.6;
+  margin-bottom: 0.45rem;
+}
+
+.privacy-testo li::marker {
+  color: var(--oliva);
+}
+
+.privacy-testo a,
+.form-informativa a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--oliva);
+  transition: color var(--transizione), text-decoration-color var(--transizione);
+  overflow-wrap: anywhere;
+}
+
+.privacy-testo a:hover,
+.privacy-testo a:focus-visible,
+.form-informativa a:hover,
+.form-informativa a:focus-visible {
+  color: var(--oliva);
+}
+
+/* Segnaposto da completare prima della pubblicazione */
+.todo-privacy {
+  background-color: rgba(224, 120, 86, 0.15);
+  border-left: 3px solid var(--terracotta);
+  padding: 0 0.35rem;
+  font-size: 0.9em;
+}
+
+/* Informativa breve sotto il modulo di contatto */
+.form-informativa {
+  font-size: 0.8rem;
+  opacity: 0.75;
+  margin-bottom: 0;
+}
+
+/* Footer: link accessibili da tastiera */
+.footer-nav a:focus-visible,
+.footer-social a:focus-visible {
+  opacity: 1;
+  color: var(--crema);
+  outline: 2px solid var(--verde-chiaro);
+  outline-offset: 2px;
+}
